@@ -407,18 +407,17 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
   function expand(side) {
     if (expanded) return;
 
+    doExpand(side);
+
     if (side === 'right') {
       const pr = document.getElementById('pr');
       const video = document.getElementById('vip-video');
-      if (!pr.classList.contains('video-active')) {
+      setTimeout(() => {
         pr.classList.add('video-active');
         video.muted = false;
         video.play();
-        return;
-      }
+      }, 1000); // after the panel expand transition completes
     }
-
-    doExpand(side);
   }
 
   function doExpand(side) {
