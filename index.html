@@ -88,7 +88,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--navy
   object-fit: cover;
   transform: scale(1.05);
   transition: transform 1.2s ease, filter 1s ease;
-  filter: brightness(0.75) saturate(0.85);
+  filter: brightness(0.95) saturate(0.95);
 }
 
 .panel:hover img { transform: scale(1.09); }
@@ -98,8 +98,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--navy
   position: absolute; inset: 0; z-index: 1;
 }
 
-#pl::after { background: linear-gradient(120deg, rgba(7,16,31,.65), rgba(7,16,31,.2)); }
-#pr::after { background: linear-gradient(240deg, rgba(7,16,31,.65), rgba(7,16,31,.2)); }
+#pl::after { background: linear-gradient(120deg, rgba(7,16,31,.35), rgba(7,16,31,.05)); }
+#pr::after { background: linear-gradient(240deg, rgba(7,16,31,.35), rgba(7,16,31,.05)); }
 
 .panel-content {
   position: absolute;
@@ -154,7 +154,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--navy
 #intro.expanded #center-logo { opacity: 0; animation: none; pointer-events: none; }
 #intro.expanded .panel.gone   { width: 0; pointer-events: none; }
 #intro.expanded .panel.active { width: 100%; }
-#intro.expanded .panel.active img { transform: scale(1); filter: brightness(.4) saturate(.7); }
+#intro.expanded .panel.active img { transform: scale(1); filter: brightness(.7) saturate(.85); }
 #intro.expanded .panel-content { opacity: 0; }
 
 /* hero text */
