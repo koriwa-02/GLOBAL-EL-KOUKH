@@ -73,26 +73,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--navy
 
 #intro.fade-out { opacity: 0; pointer-events: none; }
 
-#vip-video-overlay {
-  position: fixed; inset: 0; z-index: 9999;
-  background: #000;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none;
-  transition: opacity .4s ease;
-}
-#vip-video-overlay.show { opacity: 1; pointer-events: all; }
-#vip-video-overlay video {
-  width: 100%; height: 100%; object-fit: cover;
-}
-#vip-video-close {
-  position: absolute; top: 24px; right: 24px;
-  width: 44px; height: 44px; border-radius: 50%;
-  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.3);
-  color: #fff; font-size: 28px; line-height: 1; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 10000;
-}
-
 .panel {
   position: relative;
   width: 50%;
@@ -110,6 +90,21 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--navy
   transition: transform 1.2s ease, filter 1s ease;
   filter: brightness(0.95) saturate(0.95);
 }
+
+.panel video {
+  position: absolute;
+  inset: 0; width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scale(1.05);
+  transition: transform 1.2s ease, filter 1s ease;
+  filter: brightness(0.95) saturate(0.95);
+  display: none;
+}
+
+.panel.video-active img { display: none; }
+.panel.video-active video { display: block; }
+
+.panel:hover video { transform: scale(1.09); }
 
 .panel:hover img { transform: scale(1.09); }
 
@@ -293,6 +288,7 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
 
     <div class="panel" id="pr" onclick="expand('right')">
       <img src="images/vip.webp" alt="VIP">
+      <video id="vip-video" src="hf_20260613_014919_a9d009b2-9440-4e26-8368-f79bc9366c8d.mp4" playsinline muted loop preload="metadata"></video>
       <div class="panel-content">
         <div class="p-sub">Exclusive</div>
         <div class="p-title">Go<br>VIP</div>
@@ -304,12 +300,6 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
       <div class="hero-sub">Global El Koukh · Est. Excellence</div>
       <div class="hero-title">Beyond<br><em>Every Journey</em></div>
     </div>
-  </div>
-
-  <!-- ── VIP VIDEO OVERLAY ── -->
-  <div id="vip-video-overlay">
-    <video id="vip-video" src="hf_20260613_014919_a9d009b2-9440-4e26-8368-f79bc9366c8d.mp4" playsinline></video>
-    <button id="vip-video-close" aria-label="Close video">&times;</button>
   </div>
 
   <!-- ── SECTIONS (flow below intro) ── -->
@@ -418,8 +408,14 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
     if (expanded) return;
 
     if (side === 'right') {
-      playVipVideo();
-      return;
+      const pr = document.getElementById('pr');
+      const video = document.getElementById('vip-video');
+      if (!pr.classList.contains('video-active')) {
+        pr.classList.add('video-active');
+        video.muted = false;
+        video.play();
+        return;
+      }
     }
 
     doExpand(side);
@@ -445,26 +441,6 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
 
     currentSection = 0;
   }
-
-  function playVipVideo() {
-    const overlay = document.getElementById('vip-video-overlay');
-    const video = document.getElementById('vip-video');
-    overlay.classList.add('show');
-    video.currentTime = 0;
-    video.play();
-  }
-
-  function closeVipVideo(thenExpand) {
-    const overlay = document.getElementById('vip-video-overlay');
-    const video = document.getElementById('vip-video');
-    overlay.classList.remove('show');
-    video.pause();
-    video.currentTime = 0;
-    if (thenExpand) doExpand('right');
-  }
-
-  document.getElementById('vip-video').addEventListener('ended', () => closeVipVideo(true));
-  document.getElementById('vip-video-close').addEventListener('click', () => closeVipVideo(true));
 
   function goToSection(index) {
     if (index < 0 || index >= sectionIds.length) return;
