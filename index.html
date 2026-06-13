@@ -199,8 +199,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--navy
   transition: opacity .6s ease, transform .6s ease;
 }
 #navbar.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+#navbar.hide-nav { transform: translateY(-100%); }
 
-.nav-logo { font-family: 'Helvetica Neue', 'Inter', Helvetica, Arial, sans-serif; font-weight: 200; font-size: 14px; letter-spacing: .32em; color: var(--gold); text-transform: uppercase; text-align: center; justify-self: center; transition: letter-spacing .4s ease, text-shadow .4s ease; }
+.nav-logo { font-family: 'Helvetica Neue', 'Inter', Helvetica, Arial, sans-serif; font-weight: 200; font-size: 14px; letter-spacing: .32em; color: var(--white); text-transform: uppercase; text-align: center; justify-self: center; transition: letter-spacing .4s ease, text-shadow .4s ease; }
 .nav-logo:hover { letter-spacing: .4em; text-shadow: 0 0 14px rgba(201,168,76,.5); }
 nav ul { display: flex; gap: 36px; list-style: none; justify-self: start; }
 nav ul a { font-size: 9px; letter-spacing: .28em; color: rgba(245,243,239,.65); text-decoration: none; text-transform: uppercase; transition: color .3s; position: relative; }
@@ -478,6 +479,20 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
       currentSection = -1;
     }
   }
+
+  // Hide navbar on scroll down, show on scroll up
+  let lastScrollTop = 0;
+  scroller.addEventListener('scroll', () => {
+    const navbar = document.getElementById('navbar');
+    if (!navbar.classList.contains('show')) return;
+    const st = scroller.scrollTop;
+    if (st > lastScrollTop && st > 40) {
+      navbar.classList.add('hide-nav');
+    } else {
+      navbar.classList.remove('hide-nav');
+    }
+    lastScrollTop = st;
+  });
 
   // Browser back / forward
   window.addEventListener('popstate', e => {
