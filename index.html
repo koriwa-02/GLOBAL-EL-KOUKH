@@ -234,15 +234,20 @@ nav ul a:hover::after { width: 100%; }
 .s-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; filter: brightness(.82) saturate(.8); transition: transform 1s cubic-bezier(.16,.84,.44,1), filter .6s ease; }
 .s-img:hover { transform: scale(1.025); filter: brightness(.92) saturate(.95); }
 
-/* ── ABOUT PARALLAX INTRO ── */
+/* ── ABOUT PARALLAX INTRO (scroll-driven pinned sequence) ── */
 .about-parallax {
   position: relative;
-  min-height: 100vh;
+  height: 260vh; /* scroll distance that drives the animation */
+  background: var(--navy);
+}
+.about-parallax .pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: var(--navy);
 }
 .about-parallax .shader-bg {
   position: absolute;
@@ -265,16 +270,13 @@ nav ul a:hover::after { width: 100%; }
   background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.6) 0 1px, transparent 1px 3px),
                      repeating-linear-gradient(90deg, rgba(255,255,255,.6) 0 1px, transparent 1px 3px);
 }
-.about-parallax .pw-label {
-  position: relative; z-index: 2;
-  font-size: 9px; letter-spacing: .45em; color: var(--gold);
-  text-transform: uppercase; text-align: center;
-  margin-bottom: 28px;
-  opacity: 0; transform: translateY(20px);
-  transition: opacity 1s ease, transform 1s ease;
-}
+
+/* "WHO WE ARE" zoom / slide-up / fade hero */
 .about-parallax .pw-title {
-  position: relative; z-index: 2;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
   font-family: 'Cormorant Garamond', serif;
   font-weight: 200;
   font-size: clamp(48px, 12vw, 180px);
@@ -283,19 +285,75 @@ nav ul a:hover::after { width: 100%; }
   text-transform: uppercase;
   text-align: center;
   line-height: 1;
+  white-space: nowrap;
   will-change: transform, opacity;
 }
-.about-parallax .pw-line {
-  position: relative; z-index: 2;
-  width: 1px; height: 80px;
-  margin: 36px auto 0;
-  background: linear-gradient(to bottom, var(--gold), transparent);
-  opacity: 0;
-  transition: opacity 1.2s ease, height 1.2s ease;
+.about-parallax .pw-label {
+  position: absolute;
+  z-index: 3;
+  top: calc(50% - 130px);
+  left: 0; right: 0;
+  font-size: 9px; letter-spacing: .45em; color: var(--gold);
+  text-transform: uppercase; text-align: center;
+  will-change: transform, opacity;
 }
-.about-parallax.in-view .pw-label,
-.about-parallax.in-view .pw-line {
-  opacity: 1; transform: translateY(0);
+
+/* content that reveals as title clears out */
+.about-parallax .pw-content {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+  width: 100%;
+  padding: 0 8%;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(50px);
+  will-change: transform, opacity;
+}
+.about-parallax .pw-content .gold-line {
+  margin: 0 auto 28px;
+}
+.about-parallax .pw-content .s-title {
+  margin-bottom: 18px;
+}
+.about-parallax .pw-content .s-text {
+  margin: 0 auto 14px;
+  max-width: 560px;
+}
+
+/* trust badges */
+.pw-badges {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 38px;
+}
+.pw-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(24px);
+  will-change: transform, opacity;
+}
+.pw-badge .pw-badge-icon {
+  width: 46px; height: 46px;
+  border: 1px solid rgba(201,168,76,.4);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold);
+  transform: rotate(45deg);
+}
+.pw-badge .pw-badge-icon svg { transform: rotate(-45deg); width: 18px; height: 18px; }
+.pw-badge .pw-badge-label {
+  font-size: 9px; letter-spacing: .25em; text-transform: uppercase;
+  color: rgba(245,243,239,.6);
+}
+.pw-badge .pw-badge-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; color: var(--white); letter-spacing: .04em;
 }
 
 /* gallery */
@@ -368,29 +426,47 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
   </div>
 
   <!-- ── SECTIONS (flow below intro) ── -->
-  <div class="about-parallax" id="aboutParallax">
-    <div class="shader-bg" id="shaderBg"></div>
-    <div class="noise-grain"></div>
-    <div>
-      <div class="pw-label">Global El Koukh · Casablanca</div>
-      <div class="pw-title" id="pwTitle">Who We Are</div>
-      <div class="pw-line"></div>
-    </div>
-  </div>
+  <div class="about-parallax" id="about">
+    <div class="pin">
+      <div class="shader-bg" id="shaderBg"></div>
+      <div class="noise-grain"></div>
 
-  <section class="section" id="about">
-    <div class="s-inner">
-      <div class="reveal">
-        <div class="s-label">Our Story</div>
+      <div class="pw-label" id="pwLabel">Global El Koukh · Casablanca</div>
+      <div class="pw-title" id="pwTitle">Who We Are</div>
+
+      <div class="pw-content" id="pwContent">
+        <div class="s-label" style="opacity:1;">Our Story</div>
         <div class="gold-line"></div>
         <h2 class="s-title">Redefining Luxury<br>in Motion</h2>
-        <p class="s-text">Global El Koukh was born from a simple conviction: that every journey deserves to be experienced, not just endured. Founded in Casablanca, we have grown into Morocco's most trusted name in premium transportation — serving executives, dignitaries, and discerning individuals who refuse to compromise on quality.</p>
+        <p class="s-text">Global El Koukh was born from a simple conviction: that every journey deserves to be experienced, not just endured. Founded in Casablanca, we have grown into Morocco's most trusted name in premium transportation.</p>
         <p class="s-text">Our fleet is hand-selected for elegance and performance. Our chauffeurs are trained not only to drive, but to anticipate — your comfort, your schedule, your silence when you need it.</p>
-        <p class="s-text">We operate across Casablanca and beyond, covering airport transfers, corporate events, private occasions, and long-distance routes — always on time, always impeccable.</p>
+
+        <div class="pw-badges" id="pwBadges">
+          <div class="pw-badge">
+            <div class="pw-badge-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z"/><path d="M9 12l2 2 4-4"/></svg>
+            </div>
+            <div class="pw-badge-value">100%</div>
+            <div class="pw-badge-label">Secure & Insured</div>
+          </div>
+          <div class="pw-badge">
+            <div class="pw-badge-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 17.3l-5.5 3 1-6-4.5-4 6-.6L12 4l3 5.7 6 .6-4.5 4 1 6z"/></svg>
+            </div>
+            <div class="pw-badge-value">4.9 / 5</div>
+            <div class="pw-badge-label">Client Reviews</div>
+          </div>
+          <div class="pw-badge">
+            <div class="pw-badge-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.5"/><path d="M5 21c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>
+            </div>
+            <div class="pw-badge-value">10+ Years</div>
+            <div class="pw-badge-label">Trusted Experience</div>
+          </div>
+        </div>
       </div>
-      <img class="s-img reveal reveal-delay-1" src="https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800&q=80" alt="Luxury Car">
     </div>
-  </section>
+  </div>
 
   <section class="section alt">
     <div class="s-inner rev">
@@ -568,25 +644,54 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
     lastScrollTop = st;
   });
 
-  // "Who We Are" parallax — title and shader move at different speeds
-  const aboutParallax = document.getElementById('aboutParallax');
-  const pwTitle = document.getElementById('pwTitle');
-  const shaderBg = document.getElementById('shaderBg');
+  // "Who We Are" — scroll-driven sequence (pinned section)
+  const aboutParallax = document.getElementById('about');
+  const pwTitle   = document.getElementById('pwTitle');
+  const pwLabel   = document.getElementById('pwLabel');
+  const shaderBg  = document.getElementById('shaderBg');
+  const pwContent = document.getElementById('pwContent');
+  const pwBadges  = document.querySelectorAll('#pwBadges .pw-badge');
+
+  function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 
   function updateAboutParallax() {
     const rect = aboutParallax.getBoundingClientRect();
-    const vh = window.innerHeight;
-    // progress: -1 (below viewport) .. 0 (centered) .. 1 (above viewport)
-    const progress = (vh - rect.top) / (vh + rect.height) * 2 - 1;
-    const clamped = Math.max(-1, Math.min(1, progress));
+    const total = rect.height - window.innerHeight; // total scrollable distance through this section
+    if (total <= 0) return;
+    // progress: 0 = section just reached top, 1 = section about to leave
+    const progress = clamp01(-rect.top / total);
 
-    pwTitle.style.transform = `translateY(${clamped * -60}px)`;
-    pwTitle.style.opacity = String(1 - Math.min(1, Math.abs(clamped) * 1.2));
-    shaderBg.style.transform = `translateY(${clamped * 40}px) scale(${1 + Math.abs(clamped) * 0.08})`;
+    // Phase 1 (0 -> 0.4): "Who We Are" zooms in + slides up + fades out
+    const p1 = clamp01(progress / 0.4);
+    const e1 = easeOutCubic(p1);
+    pwTitle.style.transform = `translate(-50%, calc(-50% - ${e1 * 120}px)) scale(${1 + e1 * 0.6})`;
+    pwTitle.style.opacity = String(1 - e1);
+    pwLabel.style.transform = `translateY(${-e1 * 60}px)`;
+    pwLabel.style.opacity = String(1 - e1 * 1.4);
+
+    // background drifts the whole time
+    shaderBg.style.transform = `translateY(${progress * -60}px) scale(${1 + progress * 0.1})`;
+
+    // Phase 2 (0.25 -> 0.7): content fades & slides up
+    const p2 = clamp01((progress - 0.25) / 0.45);
+    const e2 = easeOutCubic(p2);
+    pwContent.style.opacity = String(e2);
+    pwContent.style.transform = `translateY(${(1 - e2) * 50}px)`;
+
+    // Phase 3 (0.45 -> 1.0): badges stagger in
+    pwBadges.forEach((badge, i) => {
+      const start = 0.45 + i * 0.12;
+      const p3 = clamp01((progress - start) / 0.35);
+      const e3 = easeOutCubic(p3);
+      badge.style.opacity = String(e3);
+      badge.style.transform = `translateY(${(1 - e3) * 24}px)`;
+    });
   }
   scroller.addEventListener('scroll', updateAboutParallax);
   window.addEventListener('resize', updateAboutParallax);
   updateAboutParallax();
+
 
   // Browser back / forward
   window.addEventListener('popstate', e => {
@@ -630,13 +735,6 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
   }, { threshold: 0.15, root: scroller });
 
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-  const aboutParallaxObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('in-view');
-    });
-  }, { threshold: 0.3, root: scroller });
-  aboutParallaxObserver.observe(aboutParallax);
 
 </script>
 </body>
