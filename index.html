@@ -234,6 +234,70 @@ nav ul a:hover::after { width: 100%; }
 .s-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; filter: brightness(.82) saturate(.8); transition: transform 1s cubic-bezier(.16,.84,.44,1), filter .6s ease; }
 .s-img:hover { transform: scale(1.025); filter: brightness(.92) saturate(.95); }
 
+/* ── ABOUT PARALLAX INTRO ── */
+.about-parallax {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--navy);
+}
+.about-parallax .shader-bg {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(201,168,76,.10), transparent 55%),
+    radial-gradient(circle at 75% 70%, rgba(201,168,76,.06), transparent 60%),
+    linear-gradient(135deg, var(--navy) 0%, var(--navy2) 50%, var(--navy) 100%);
+  background-size: 200% 200%;
+  animation: shaderShift 22s ease-in-out infinite alternate;
+  will-change: transform, background-position;
+}
+@keyframes shaderShift {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+.about-parallax .noise-grain {
+  position: absolute; inset: 0;
+  opacity: .04; mix-blend-mode: overlay; pointer-events: none;
+  background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.6) 0 1px, transparent 1px 3px),
+                     repeating-linear-gradient(90deg, rgba(255,255,255,.6) 0 1px, transparent 1px 3px);
+}
+.about-parallax .pw-label {
+  position: relative; z-index: 2;
+  font-size: 9px; letter-spacing: .45em; color: var(--gold);
+  text-transform: uppercase; text-align: center;
+  margin-bottom: 28px;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.about-parallax .pw-title {
+  position: relative; z-index: 2;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 200;
+  font-size: clamp(48px, 12vw, 180px);
+  letter-spacing: .15em;
+  color: var(--white);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1;
+  will-change: transform, opacity;
+}
+.about-parallax .pw-line {
+  position: relative; z-index: 2;
+  width: 1px; height: 80px;
+  margin: 36px auto 0;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 1.2s ease, height 1.2s ease;
+}
+.about-parallax.in-view .pw-label,
+.about-parallax.in-view .pw-line {
+  opacity: 1; transform: translateY(0);
+}
+
 /* gallery */
 #gallery { min-height: auto; display: block; padding: 100px 8%; background: var(--navy2); }
 .g-head { text-align: center; margin-bottom: 60px; }
@@ -304,10 +368,20 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
   </div>
 
   <!-- ── SECTIONS (flow below intro) ── -->
+  <div class="about-parallax" id="aboutParallax">
+    <div class="shader-bg" id="shaderBg"></div>
+    <div class="noise-grain"></div>
+    <div>
+      <div class="pw-label">Global El Koukh · Casablanca</div>
+      <div class="pw-title" id="pwTitle">Who We Are</div>
+      <div class="pw-line"></div>
+    </div>
+  </div>
+
   <section class="section" id="about">
     <div class="s-inner">
       <div class="reveal">
-        <div class="s-label">Who We Are</div>
+        <div class="s-label">Our Story</div>
         <div class="gold-line"></div>
         <h2 class="s-title">Redefining Luxury<br>in Motion</h2>
         <p class="s-text">Global El Koukh was born from a simple conviction: that every journey deserves to be experienced, not just endured. Founded in Casablanca, we have grown into Morocco's most trusted name in premium transportation — serving executives, dignitaries, and discerning individuals who refuse to compromise on quality.</p>
@@ -494,6 +568,26 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
     lastScrollTop = st;
   });
 
+  // "Who We Are" parallax — title and shader move at different speeds
+  const aboutParallax = document.getElementById('aboutParallax');
+  const pwTitle = document.getElementById('pwTitle');
+  const shaderBg = document.getElementById('shaderBg');
+
+  function updateAboutParallax() {
+    const rect = aboutParallax.getBoundingClientRect();
+    const vh = window.innerHeight;
+    // progress: -1 (below viewport) .. 0 (centered) .. 1 (above viewport)
+    const progress = (vh - rect.top) / (vh + rect.height) * 2 - 1;
+    const clamped = Math.max(-1, Math.min(1, progress));
+
+    pwTitle.style.transform = `translateY(${clamped * -60}px)`;
+    pwTitle.style.opacity = String(1 - Math.min(1, Math.abs(clamped) * 1.2));
+    shaderBg.style.transform = `translateY(${clamped * 40}px) scale(${1 + Math.abs(clamped) * 0.08})`;
+  }
+  scroller.addEventListener('scroll', updateAboutParallax);
+  window.addEventListener('resize', updateAboutParallax);
+  updateAboutParallax();
+
   // Browser back / forward
   window.addEventListener('popstate', e => {
     const state = e.state;
@@ -536,6 +630,14 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
   }, { threshold: 0.15, root: scroller });
 
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  const aboutParallaxObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('in-view');
+    });
+  }, { threshold: 0.3, root: scroller });
+  aboutParallaxObserver.observe(aboutParallax);
+
 </script>
 </body>
 </html>
