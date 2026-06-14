@@ -439,15 +439,22 @@ nav ul a:hover::after { width: 100%; }
   width: 100%;
   padding: 0 8%;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 60px;
   opacity: 0;
   transform: translateX(80px);
   will-change: transform, opacity;
 }
+.vip-offer-left {
+  display: flex;
+  align-items: flex-end;
+  gap: 40px;
+  flex: 1;
+  min-width: 0;
+}
 .vip-offer-num {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(80px, 15vw, 160px);
+  font-size: clamp(80px, 12vw, 140px);
   font-weight: 200;
   color: rgba(201,168,76,.08);
   line-height: 1;
@@ -458,6 +465,31 @@ nav ul a:hover::after { width: 100%; }
   padding-bottom: 16px;
   border-bottom: 1px solid rgba(201,168,76,.2);
   flex: 1;
+  min-width: 0;
+}
+.vip-offer-img {
+  width: clamp(200px, 28vw, 380px);
+  aspect-ratio: 3/4;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+}
+.vip-offer-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(7,16,31,.35), transparent 60%);
+  pointer-events: none;
+}
+.vip-offer-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(.8) saturate(.7);
+  transform: scale(1.08);
+  transition: transform 1s ease;
+}
+.vip-offer-item.active .vip-offer-img img {
+  transform: scale(1);
 }
 .vip-offer-tag {
   font-size: 9px; letter-spacing: .4em; color: var(--gold);
@@ -640,47 +672,72 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
       <div class="vip-offers-label">Go VIP · What We Offer</div>
 
       <div class="vip-offer-item" id="vip-offer-1">
-        <div class="vip-offer-num">01</div>
-        <div class="vip-offer-body">
-          <div class="vip-offer-tag">Security</div>
-          <div class="vip-offer-title">Discreet<br>Protection</div>
-          <div class="vip-offer-desc">Every route is planned, every risk anticipated. Our chauffeurs are trained in advanced security protocols — your safety is never left to chance.</div>
+        <div class="vip-offer-left">
+          <div class="vip-offer-num">01</div>
+          <div class="vip-offer-body">
+            <div class="vip-offer-tag">Security</div>
+            <div class="vip-offer-title">Discreet<br>Protection</div>
+            <div class="vip-offer-desc">Every route is planned, every risk anticipated. Our chauffeurs are trained in advanced security protocols — your safety is never left to chance.</div>
+          </div>
+        </div>
+        <div class="vip-offer-img">
+          <img src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=600&q=80&auto=format&fit=crop" alt="Security">
         </div>
       </div>
 
       <div class="vip-offer-item" id="vip-offer-2">
-        <div class="vip-offer-num">02</div>
-        <div class="vip-offer-body">
-          <div class="vip-offer-tag">Comfort</div>
-          <div class="vip-offer-title">Premium<br>Interior</div>
-          <div class="vip-offer-desc">Cream leather seating, ambient lighting, whisper-quiet cabins and individual climate control. Every journey is a sanctuary.</div>
+        <div class="vip-offer-left">
+          <div class="vip-offer-num">02</div>
+          <div class="vip-offer-body">
+            <div class="vip-offer-tag">Comfort</div>
+            <div class="vip-offer-title">Premium<br>Interior</div>
+            <div class="vip-offer-desc">Cream leather seating, ambient lighting, whisper-quiet cabins and individual climate control. Every journey is a sanctuary.</div>
+          </div>
+        </div>
+        <div class="vip-offer-img">
+          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80&auto=format&fit=crop" alt="Comfort">
         </div>
       </div>
 
       <div class="vip-offer-item" id="vip-offer-3">
-        <div class="vip-offer-num">03</div>
-        <div class="vip-offer-body">
-          <div class="vip-offer-tag">Privacy</div>
-          <div class="vip-offer-title">Your Journey<br>Stays Yours</div>
-          <div class="vip-offer-desc">Tinted windows, partition screens, zero tracking. What happens in transit remains entirely between you and your destination.</div>
+        <div class="vip-offer-left">
+          <div class="vip-offer-num">03</div>
+          <div class="vip-offer-body">
+            <div class="vip-offer-tag">Privacy</div>
+            <div class="vip-offer-title">Your Journey<br>Stays Yours</div>
+            <div class="vip-offer-desc">Tinted windows, partition screens, zero tracking. What happens in transit remains entirely between you and your destination.</div>
+          </div>
+        </div>
+        <div class="vip-offer-img">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&auto=format&fit=crop" alt="Privacy">
         </div>
       </div>
 
       <div class="vip-offer-item" id="vip-offer-4">
-        <div class="vip-offer-num">04</div>
-        <div class="vip-offer-body">
-          <div class="vip-offer-tag">Punctuality</div>
-          <div class="vip-offer-title">On Time.<br>Every Time.</div>
-          <div class="vip-offer-desc">Real-time traffic monitoring, pre-planned routes and a zero-tolerance approach to delays. Your schedule is our priority.</div>
+        <div class="vip-offer-left">
+          <div class="vip-offer-num">04</div>
+          <div class="vip-offer-body">
+            <div class="vip-offer-tag">Punctuality</div>
+            <div class="vip-offer-title">On Time.<br>Every Time.</div>
+            <div class="vip-offer-desc">Real-time traffic monitoring, pre-planned routes and a zero-tolerance approach to delays. Your schedule is our priority.</div>
+          </div>
+        </div>
+        <div class="vip-offer-img">
+          <img src="https://images.unsplash.com/photo-1495522022559-0e899e7c17c8?w=600&q=80&auto=format&fit=crop" alt="Punctuality">
         </div>
       </div>
 
       <div class="vip-offer-item" id="vip-offer-5">
-        <div class="vip-offer-num">05</div>
-        <div class="vip-offer-body">
-          <div class="vip-offer-tag">Exclusivity</div>
-          <div class="vip-offer-title">A Fleet Apart</div>
-          <div class="vip-offer-desc">Hand-selected vehicles, immaculate presentation and a service level reserved for those who refuse to compromise. This is Go VIP.</div>
+        <div class="vip-offer-left">
+          <div class="vip-offer-num">05</div>
+          <div class="vip-offer-body">
+            <div class="vip-offer-tag">Exclusivity</div>
+            <div class="vip-offer-title">A Fleet Apart</div>
+            <div class="vip-offer-desc">Hand-selected vehicles, immaculate presentation and a service level reserved for those who refuse to compromise. This is Go VIP.</div>
+          </div>
+        </div>
+        <div class="vip-offer-img">
+          <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?w=600&q=80&auto=format&fit=crop" alt="Exclusivity">
         </div>
       </div>
 
@@ -921,6 +978,7 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
 
       // dots
       if (vipDots[i]) vipDots[i].classList.toggle('active', p > 0.1 && p < 0.95 || (i === TOTAL_OFFERS - 1 && p >= 0.1));
+      item.classList.toggle('active', p > 0.05);
     });
   }
 
