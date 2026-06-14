@@ -366,6 +366,48 @@ nav ul a:hover::after { width: 100%; }
 }
 
 /* ── VIP OFFERS SCROLL SECTION ── */
+/* ticker bar */
+.ticker-bar {
+  background: var(--navy);
+  border-top: 1px solid rgba(201,168,76,.15);
+  border-bottom: 1px solid rgba(201,168,76,.15);
+  padding: 18px 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+.ticker-track {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  animation: ticker-scroll 28s linear infinite;
+}
+.ticker-track:hover { animation-play-state: paused; }
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 0 32px;
+  white-space: nowrap;
+  font-size: 10px;
+  letter-spacing: .4em;
+  text-transform: uppercase;
+  color: rgba(201,168,76,.7);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+}
+.ticker-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: .5;
+  flex-shrink: 0;
+}
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 .vip-offers {
   position: relative;
   height: 600vh;
@@ -565,6 +607,30 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ── TICKER BAR ── -->
+  <div class="ticker-bar">
+    <div class="ticker-track">
+      <!-- set 1 -->
+      <div class="ticker-item">Global El Koukh<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Transport Personnel<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Go VIP<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Casablanca<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Premium Fleet<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Executive Transfers<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Discreet · Punctual · Exclusive<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Morocco's Finest<span class="ticker-dot"></span></div>
+      <!-- set 2 (duplicate for seamless loop) -->
+      <div class="ticker-item">Global El Koukh<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Transport Personnel<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Go VIP<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Casablanca<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Premium Fleet<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Executive Transfers<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Discreet · Punctual · Exclusive<span class="ticker-dot"></span></div>
+      <div class="ticker-item">Morocco's Finest<span class="ticker-dot"></span></div>
     </div>
   </div>
 
