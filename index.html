@@ -401,8 +401,9 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
       </div>
     </div>
 
-    <div class="panel video-active" id="pl" onclick="expand('left')">
-      <video id="personnel-video" src="PERSONNEL%20INTRO.mp4" playsinline muted loop preload="auto" autoplay></video>
+    <div class="panel" id="pl" onclick="expand('left')">
+      <img src="images/personnel.webp" alt="Personnel">
+      <video id="personnel-video" src="PERSONNEL%20INTRO.mp4" playsinline muted loop preload="auto"></video>
       <div class="panel-content">
         <div class="p-sub">Premium</div>
         <div class="p-title">Transport<br>Personnel</div>
@@ -556,9 +557,14 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
 
   scroller.scrollTop = 0;
 
-  // Autoplay personnel video (bypass browser block by calling play() in JS)
+  // Autoplay personnel video — show image fallback until video ready
   const personnelVid = document.getElementById('personnel-video');
-  if (personnelVid) personnelVid.play().catch(() => {});
+  if (personnelVid) {
+    personnelVid.addEventListener('canplay', () => {
+      personnelVid.play().catch(() => {});
+      document.getElementById('pl').classList.add('video-active');
+    }, { once: true });
+  }
 
   function expand(side) {
     if (expanded) return;
