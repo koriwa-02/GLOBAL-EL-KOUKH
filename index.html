@@ -392,6 +392,17 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
 <div id="scroller">
 
   <!-- ── INTRO ── -->
+  <!-- ── PERSONNEL INTRO VIDEO OVERLAY ── -->
+  <div id="personnel-overlay" style="display:none; position:fixed; inset:0; z-index:9999; background:#000;">
+    <video id="personnel-intro-video"
+      src="PERSONNEL%20INTRO.mp4"
+      playsinline
+      muted
+      preload="auto"
+      style="width:100%;height:100%;object-fit:cover;display:block;">
+    </video>
+  </div>
+
   <div id="intro">
     <div class="divider"></div>
     <div id="center-logo" style="display:none;">
@@ -557,6 +568,29 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
 
   function expand(side) {
     if (expanded) return;
+
+    if (side === 'left') {
+      // Play personnel intro fullscreen — no navbar, no text, no loop
+      const overlay = document.getElementById('personnel-overlay');
+      const vid     = document.getElementById('personnel-intro-video');
+      overlay.style.display = 'block';
+      // hide navbar while video plays
+      document.getElementById('navbar').style.visibility = 'hidden';
+      vid.play().catch(() => {});
+      vid.addEventListener('ended', () => {
+        // freeze on last frame — do NOT hide overlay, do NOT loop
+        // show navbar back and proceed to expand the panel
+        document.getElementById('navbar').style.visibility = '';
+        overlay.style.display = 'none';
+        doExpand(side);
+        setTimeout(() => { document.getElementById('hero-text').classList.add('show'); }, 850);
+        setTimeout(() => {
+          document.getElementById('navbar').classList.add('show');
+          updateAboutParallax();
+        }, 1050);
+      }, { once: true });
+      return; // don't doExpand yet — wait for video to end
+    }
 
     doExpand(side);
 
