@@ -411,8 +411,8 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
       </div>
     </div>
 
-    <div class="panel" id="pl" onclick="expand('left')">
-      <img src="images/personnel.webp" alt="Personnel">
+    <div class="panel video-active" id="pl" onclick="expand('left')">
+      <video id="personnel-video" src="PERSONNEL%20INTRO.mp4" playsinline muted loop preload="auto" autoplay></video>
       <div class="panel-content">
         <div class="p-sub">Premium</div>
         <div class="p-title">Transport<br>Personnel</div>
@@ -569,41 +569,17 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
   function expand(side) {
     if (expanded) return;
 
-    if (side === 'left') {
-      // Play personnel intro fullscreen — no navbar, no text, no loop
-      const overlay = document.getElementById('personnel-overlay');
-      const vid     = document.getElementById('personnel-intro-video');
-      overlay.style.display = 'block';
-      // hide navbar while video plays
-      document.getElementById('navbar').style.visibility = 'hidden';
-      vid.play().catch(() => {});
-      vid.addEventListener('ended', () => {
-        // freeze on last frame — do NOT hide overlay, do NOT loop
-        // show navbar back and proceed to expand the panel
-        document.getElementById('navbar').style.visibility = '';
-        overlay.style.display = 'none';
-        doExpand(side);
-        setTimeout(() => { document.getElementById('hero-text').classList.add('show'); }, 850);
-        setTimeout(() => {
-          document.getElementById('navbar').classList.add('show');
-          updateAboutParallax();
-        }, 1050);
-      }, { once: true });
-      return; // don't doExpand yet — wait for video to end
-    }
-
     doExpand(side);
 
     if (side === 'right') {
       const pr = document.getElementById('pr');
       const video = document.getElementById('vip-video');
-      // start playback immediately within the user gesture (muted, required by browsers)
       video.play().catch(() => {});
       setTimeout(() => {
         pr.classList.add('video-active');
         video.muted = false;
         video.play().catch(() => {});
-      }, 1000); // after the panel expand transition completes
+      }, 1000);
     }
   }
 
