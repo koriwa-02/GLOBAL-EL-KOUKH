@@ -413,7 +413,7 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
 
     <div class="panel" id="pr" onclick="expand('right')">
       <img src="images/vip.webp" alt="VIP">
-      <video id="vip-video" src="hf_20260613_014919_a9d009b2-9440-4e26-8368-f79bc9366c8d.mp4" playsinline muted loop preload="auto"></video>
+      <video id="vip-video" src="vip-intro.mp4" playsinline muted loop="false" preload="auto"></video>
       <div class="panel-content">
         <div class="p-sub">Exclusive</div>
         <div class="p-title">Go<br>VIP</div>
@@ -592,12 +592,20 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
     if (side === 'right') {
       const pr = document.getElementById('pr');
       const video = document.getElementById('vip-video');
+      video.loop = false;
+      // Add dark overlay
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:absolute;inset:0;background:rgba(7,16,31,.45);z-index:2;pointer-events:none;';
+      pr.appendChild(overlay);
       video.play().catch(() => {});
       setTimeout(() => {
         pr.classList.add('video-active');
         video.muted = false;
         video.play().catch(() => {});
       }, 1000);
+      video.addEventListener('ended', () => {
+        document.getElementById('hero-text').classList.add('show');
+      }, { once: true });
     }
   }
 
