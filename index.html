@@ -468,28 +468,28 @@ nav ul a:hover::after { width: 100%; }
   min-width: 0;
 }
 .vip-offer-img {
-  width: clamp(200px, 28vw, 380px);
-  aspect-ratio: 3/4;
+  width: clamp(280px, 42vw, 620px);
+  height: 100vh;
   flex-shrink: 0;
-  overflow: hidden;
   position: relative;
-}
-.vip-offer-img::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(7,16,31,.35), transparent 60%);
+  overflow: visible;
   pointer-events: none;
 }
 .vip-offer-img img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  filter: brightness(.8) saturate(.7);
-  transform: scale(1.08);
-  transition: transform 1s ease;
+  position: absolute;
+  bottom: -2vh;
+  left: 50%;
+  transform: translateX(-50%) translateX(60px);
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 40px 80px rgba(0,0,0,.7)) drop-shadow(0 0 40px rgba(201,168,76,.08));
+  opacity: 0;
+  transition: opacity .05s;
+  will-change: transform, opacity;
 }
-.vip-offer-item.active .vip-offer-img img {
-  transform: scale(1);
+.vip-offer-item.img-ready .vip-offer-img img {
+  opacity: 1;
 }
 .vip-offer-tag {
   font-size: 9px; letter-spacing: .4em; color: var(--gold);
@@ -680,8 +680,8 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
             <div class="vip-offer-desc">Every route is planned, every risk anticipated. Our chauffeurs are trained in advanced security protocols — your safety is never left to chance.</div>
           </div>
         </div>
-        <div class="vip-offer-img">
-          <img src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=600&q=80&auto=format&fit=crop" alt="Security">
+        <div class="vip-offer-img" id="vip-img-1">
+          <img src="images/van.png" alt="Fleet Vehicle">
         </div>
       </div>
 
@@ -694,8 +694,8 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
             <div class="vip-offer-desc">Cream leather seating, ambient lighting, whisper-quiet cabins and individual climate control. Every journey is a sanctuary.</div>
           </div>
         </div>
-        <div class="vip-offer-img">
-          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80&auto=format&fit=crop" alt="Comfort">
+        <div class="vip-offer-img" id="vip-img-2">
+          <img src="images/van.png" alt="Fleet Vehicle">
         </div>
       </div>
 
@@ -708,8 +708,8 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
             <div class="vip-offer-desc">Tinted windows, partition screens, zero tracking. What happens in transit remains entirely between you and your destination.</div>
           </div>
         </div>
-        <div class="vip-offer-img">
-          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&auto=format&fit=crop" alt="Privacy">
+        <div class="vip-offer-img" id="vip-img-3">
+          <img src="images/van.png" alt="Fleet Vehicle">
         </div>
       </div>
 
@@ -722,8 +722,8 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
             <div class="vip-offer-desc">Real-time traffic monitoring, pre-planned routes and a zero-tolerance approach to delays. Your schedule is our priority.</div>
           </div>
         </div>
-        <div class="vip-offer-img">
-          <img src="https://images.unsplash.com/photo-1495522022559-0e899e7c17c8?w=600&q=80&auto=format&fit=crop" alt="Punctuality">
+        <div class="vip-offer-img" id="vip-img-4">
+          <img src="images/van.png" alt="Fleet Vehicle">
         </div>
       </div>
 
@@ -736,8 +736,8 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
             <div class="vip-offer-desc">Hand-selected vehicles, immaculate presentation and a service level reserved for those who refuse to compromise. This is Go VIP.</div>
           </div>
         </div>
-        <div class="vip-offer-img">
-          <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?w=600&q=80&auto=format&fit=crop" alt="Exclusivity">
+        <div class="vip-offer-img" id="vip-img-5">
+          <img src="images/van.png" alt="Fleet Vehicle">
         </div>
       </div>
 
@@ -944,11 +944,23 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
     }
   }
 
-  // ── VIP OFFERS scroll-driven animation ──
+    // ── VIP OFFERS scroll-driven animation ──
   const vipOffersSection = document.getElementById('vip-offers');
   const vipItems = document.querySelectorAll('.vip-offer-item');
   const vipDots  = document.querySelectorAll('.vip-progress-dot');
   const TOTAL_OFFERS = vipItems.length;
+
+  // Mark images ready after load
+  vipItems.forEach(item => {
+    const img = item.querySelector('.vip-offer-img img');
+    if (img) {
+      if (img.complete) item.classList.add('img-ready');
+      else img.addEventListener('load', () => item.classList.add('img-ready'));
+    }
+  });
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+  function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
 
   function updateVipOffers() {
     if (!vipOffersSection) return;
@@ -957,23 +969,40 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
     if (total <= 0) return;
     const progress = Math.max(0, Math.min(1, -rect.top / total));
 
-    // divide progress into N equal slots
     const slot = 1 / TOTAL_OFFERS;
     vipItems.forEach((item, i) => {
       const start = i * slot;
       const end   = (i + 1) * slot;
       const p = Math.max(0, Math.min(1, (progress - start) / slot));
-      const eased = 1 - Math.pow(1 - p, 3);
+      const eased = easeOutCubic(p);
+      const eased4 = easeOutQuart(p);
 
-      // slide in
-      item.style.opacity   = String(Math.min(1, eased * 1.5));
-      item.style.transform = `translateX(${(1 - eased) * 80}px)`;
+      // Text: slide in from right
+      let textOpacity = Math.min(1, eased * 1.5);
+      let textX = (1 - eased) * 80;
 
-      // fade out as next one comes in
-      if (p > 0.7 && i < TOTAL_OFFERS - 1) {
-        const out = (p - 0.7) / 0.3;
-        item.style.opacity   = String(Math.max(0, 1 - out));
-        item.style.transform = `translateX(${-out * 40}px)`;
+      // Van PNG: slides in from far right, slightly delayed vs text
+      const vanP = Math.max(0, Math.min(1, (p - 0.08) / 0.92));
+      const vanEased = easeOutQuart(vanP);
+      const vanX = (1 - vanEased) * 140;
+      // Subtle vertical float based on scroll position within slot
+      const vanY = Math.sin(p * Math.PI) * -12;
+
+      // Fade out as next one comes in
+      if (p > 0.68 && i < TOTAL_OFFERS - 1) {
+        const out = (p - 0.68) / 0.32;
+        textOpacity = Math.max(0, 1 - out);
+        textX = -out * 40;
+      }
+
+      item.style.opacity = String(textOpacity);
+      item.style.transform = `translateX(${textX}px)`;
+
+      // Animate van separately
+      const vanImg = item.querySelector('.vip-offer-img img');
+      if (vanImg) {
+        vanImg.style.transform = `translateX(calc(-50% + ${vanX}px)) translateY(${vanY}px)`;
+        vanImg.style.opacity = String(Math.min(1, vanEased * 1.4));
       }
 
       // dots
