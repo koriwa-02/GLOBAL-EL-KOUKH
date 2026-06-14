@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Global El Koukh</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@200;300;400;500&family=Inter:wght@100;200;300&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@200;300;400;500&family=Inter:wght@100;200;300&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@200;300;400;500&family=Inter:wght@100;200;300&display=swap" rel="stylesheet"></noscript>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root { --gold: #c9a84c; --navy: #07101f; --navy2: #0d1b2e; --white: #f5f3ef; }
@@ -80,25 +83,29 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--navy
   overflow: hidden;
   cursor: pointer;
   transition: width 1s cubic-bezier(0.77,0,0.18,1), flex 1s cubic-bezier(0.77,0,0.18,1);
+  will-change: width;
+  transform: translateZ(0);
 }
 
 .panel img {
   position: absolute;
   inset: 0; width: 100%; height: 100%;
   object-fit: cover;
-  transform: scale(1.05);
+  transform: scale(1.05) translateZ(0);
   transition: transform 1.2s ease, filter 1s ease;
   filter: brightness(0.95) saturate(0.95);
+  will-change: transform;
 }
 
 .panel video {
   position: absolute;
   inset: 0; width: 100%; height: 100%;
   object-fit: cover;
-  transform: scale(1.05);
+  transform: scale(1.05) translateZ(0);
   transition: transform 1.2s ease, filter 1s ease;
   filter: brightness(0.95) saturate(0.95);
   display: none;
+  will-change: transform;
 }
 
 .panel.video-active img { display: none; }
@@ -260,7 +267,7 @@ nav ul a:hover::after { width: 100%; }
     linear-gradient(135deg, var(--navy) 0%, var(--navy2) 50%, var(--navy) 100%);
   background-size: 200% 200%;
   animation: shaderShift 22s ease-in-out infinite alternate;
-  will-change: transform, background-position;
+  will-change: transform;
 }
 @keyframes shaderShift {
   0%   { background-position: 0% 0%; }
@@ -668,21 +675,10 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
     }
   }
 
-  // Hide navbar on scroll down, show on scroll up
+  // ── SCROLL HANDLER (single RAF-throttled listener) ──
   let lastScrollTop = 0;
-  scroller.addEventListener('scroll', () => {
-    const navbar = document.getElementById('navbar');
-    if (!navbar.classList.contains('show')) return;
-    const st = scroller.scrollTop;
-    if (st > lastScrollTop && st > 40) {
-      navbar.classList.add('hide-nav');
-    } else {
-      navbar.classList.remove('hide-nav');
-    }
-    lastScrollTop = st;
-  });
+  let rafPending = false;
 
-  // "Who We Are" — scroll-driven sequence (pinned section)
   const aboutParallax = document.getElementById('about');
   const pwTitle   = document.getElementById('pwTitle');
   const pwLabel   = document.getElementById('pwLabel');
@@ -695,12 +691,10 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
 
   function updateAboutParallax() {
     const rect = aboutParallax.getBoundingClientRect();
-    const total = rect.height - window.innerHeight; // total scrollable distance through this section
+    const total = rect.height - window.innerHeight;
     if (total <= 0) return;
-    // progress: 0 = section just reached top, 1 = section about to leave
     const progress = clamp01(-rect.top / total);
 
-    // Phase 1 (0 -> 0.4): "Who We Are" zooms in + slides up + fades out
     const p1 = clamp01(progress / 0.4);
     const e1 = easeOutCubic(p1);
     pwTitle.style.transform = `translate(-50%, calc(-50% - ${e1 * 120}px)) scale(${1 + e1 * 0.6})`;
@@ -708,16 +702,13 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
     pwLabel.style.transform = `translateY(${-e1 * 60}px)`;
     pwLabel.style.opacity = String(1 - e1 * 1.4);
 
-    // background drifts the whole time
     shaderBg.style.transform = `translateY(${progress * -60}px) scale(${1 + progress * 0.1})`;
 
-    // Phase 2 (0.25 -> 0.7): content fades & slides up
     const p2 = clamp01((progress - 0.25) / 0.45);
     const e2 = easeOutCubic(p2);
     pwContent.style.opacity = String(e2);
     pwContent.style.transform = `translateY(${(1 - e2) * 50}px)`;
 
-    // Phase 3 (0.45 -> 1.0): badges stagger in
     pwBadges.forEach((badge, i) => {
       const start = 0.45 + i * 0.12;
       const p3 = clamp01((progress - start) / 0.35);
@@ -726,7 +717,26 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
       badge.style.transform = `translateY(${(1 - e3) * 24}px)`;
     });
   }
-  scroller.addEventListener('scroll', updateAboutParallax);
+
+  function onScroll() {
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(() => {
+      rafPending = false;
+      // navbar hide/show
+      const navbar = document.getElementById('navbar');
+      if (navbar.classList.contains('show')) {
+        const st = scroller.scrollTop;
+        if (st > lastScrollTop && st > 40) navbar.classList.add('hide-nav');
+        else navbar.classList.remove('hide-nav');
+        lastScrollTop = st;
+      }
+      // parallax
+      updateAboutParallax();
+    });
+  }
+
+  scroller.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', updateAboutParallax);
   updateAboutParallax();
 
