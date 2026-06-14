@@ -365,6 +365,98 @@ nav ul a:hover::after { width: 100%; }
   font-size: 22px; color: var(--white); letter-spacing: .04em;
 }
 
+/* ── VIP OFFERS SCROLL SECTION ── */
+.vip-offers {
+  position: relative;
+  height: 600vh;
+  background: var(--navy);
+}
+.vip-offers .pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vip-offers-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(201,168,76,.06), transparent 65%),
+              var(--navy);
+}
+.vip-offers-label {
+  position: absolute;
+  top: 48px; left: 8%;
+  font-size: 9px; letter-spacing: .45em; color: var(--gold);
+  text-transform: uppercase;
+}
+.vip-offer-item {
+  position: absolute;
+  width: 100%;
+  padding: 0 8%;
+  display: flex;
+  align-items: flex-end;
+  gap: 60px;
+  opacity: 0;
+  transform: translateX(80px);
+  will-change: transform, opacity;
+}
+.vip-offer-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(80px, 15vw, 160px);
+  font-weight: 200;
+  color: rgba(201,168,76,.08);
+  line-height: 1;
+  flex-shrink: 0;
+  user-select: none;
+}
+.vip-offer-body {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(201,168,76,.2);
+  flex: 1;
+}
+.vip-offer-tag {
+  font-size: 9px; letter-spacing: .4em; color: var(--gold);
+  text-transform: uppercase; margin-bottom: 14px;
+}
+.vip-offer-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 5vw, 72px);
+  font-weight: 200;
+  color: var(--white);
+  letter-spacing: .06em;
+  line-height: 1;
+  margin-bottom: 18px;
+}
+.vip-offer-desc {
+  font-size: 12px;
+  line-height: 2;
+  color: rgba(245,243,239,.45);
+  letter-spacing: .04em;
+  max-width: 480px;
+}
+.vip-progress {
+  position: absolute;
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vip-progress-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: rgba(201,168,76,.25);
+  transition: background .4s, transform .4s;
+}
+.vip-progress-dot.active {
+  background: var(--gold);
+  transform: scale(1.6);
+}
+
 /* gallery */
 #gallery { min-height: auto; display: block; padding: 100px 8%; background: var(--navy2); }
 .g-head { text-align: center; margin-bottom: 60px; }
@@ -476,18 +568,65 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
     </div>
   </div>
 
-  <section class="section alt">
-    <div class="s-inner rev">
-      <div class="reveal">
-        <div class="s-label">What We Offer</div>
-        <div class="gold-line"></div>
-        <h2 class="s-title">Two Worlds.<br>One Standard.</h2>
-        <p class="s-text">Our <strong style="color:var(--gold);font-weight:400;">Transport Personnel</strong> service ensures reliable, professional transfers for executives, teams, and daily commuters who expect more.</p>
-        <p class="s-text">Our <strong style="color:var(--gold);font-weight:400;">Go VIP</strong> experience is a world apart — black fleet, red-carpet treatment, and absolute privacy for those who demand the extraordinary.</p>
+  <div class="vip-offers" id="vip-offers">
+    <div class="pin">
+      <div class="vip-offers-bg"></div>
+      <div class="vip-offers-label">Go VIP · What We Offer</div>
+
+      <div class="vip-offer-item" id="vip-offer-1">
+        <div class="vip-offer-num">01</div>
+        <div class="vip-offer-body">
+          <div class="vip-offer-tag">Security</div>
+          <div class="vip-offer-title">Discreet<br>Protection</div>
+          <div class="vip-offer-desc">Every route is planned, every risk anticipated. Our chauffeurs are trained in advanced security protocols — your safety is never left to chance.</div>
+        </div>
       </div>
-      <img class="s-img reveal reveal-delay-1" src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80" alt="VIP Car">
+
+      <div class="vip-offer-item" id="vip-offer-2">
+        <div class="vip-offer-num">02</div>
+        <div class="vip-offer-body">
+          <div class="vip-offer-tag">Comfort</div>
+          <div class="vip-offer-title">Premium<br>Interior</div>
+          <div class="vip-offer-desc">Cream leather seating, ambient lighting, whisper-quiet cabins and individual climate control. Every journey is a sanctuary.</div>
+        </div>
+      </div>
+
+      <div class="vip-offer-item" id="vip-offer-3">
+        <div class="vip-offer-num">03</div>
+        <div class="vip-offer-body">
+          <div class="vip-offer-tag">Privacy</div>
+          <div class="vip-offer-title">Your Journey<br>Stays Yours</div>
+          <div class="vip-offer-desc">Tinted windows, partition screens, zero tracking. What happens in transit remains entirely between you and your destination.</div>
+        </div>
+      </div>
+
+      <div class="vip-offer-item" id="vip-offer-4">
+        <div class="vip-offer-num">04</div>
+        <div class="vip-offer-body">
+          <div class="vip-offer-tag">Punctuality</div>
+          <div class="vip-offer-title">On Time.<br>Every Time.</div>
+          <div class="vip-offer-desc">Real-time traffic monitoring, pre-planned routes and a zero-tolerance approach to delays. Your schedule is our priority.</div>
+        </div>
+      </div>
+
+      <div class="vip-offer-item" id="vip-offer-5">
+        <div class="vip-offer-num">05</div>
+        <div class="vip-offer-body">
+          <div class="vip-offer-tag">Exclusivity</div>
+          <div class="vip-offer-title">A Fleet Apart</div>
+          <div class="vip-offer-desc">Hand-selected vehicles, immaculate presentation and a service level reserved for those who refuse to compromise. This is Go VIP.</div>
+        </div>
+      </div>
+
+      <div class="vip-progress" id="vip-progress">
+        <div class="vip-progress-dot active"></div>
+        <div class="vip-progress-dot"></div>
+        <div class="vip-progress-dot"></div>
+        <div class="vip-progress-dot"></div>
+        <div class="vip-progress-dot"></div>
+      </div>
     </div>
-  </section>
+  </div>
 
   <section id="gallery">
     <div class="g-head reveal">
@@ -682,7 +821,44 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
     }
   }
 
-  // ── SCROLL HANDLER (single RAF-throttled listener) ──
+  // ── VIP OFFERS scroll-driven animation ──
+  const vipOffersSection = document.getElementById('vip-offers');
+  const vipItems = document.querySelectorAll('.vip-offer-item');
+  const vipDots  = document.querySelectorAll('.vip-progress-dot');
+  const TOTAL_OFFERS = vipItems.length;
+
+  function updateVipOffers() {
+    if (!vipOffersSection) return;
+    const rect = vipOffersSection.getBoundingClientRect();
+    const total = rect.height - window.innerHeight;
+    if (total <= 0) return;
+    const progress = Math.max(0, Math.min(1, -rect.top / total));
+
+    // divide progress into N equal slots
+    const slot = 1 / TOTAL_OFFERS;
+    vipItems.forEach((item, i) => {
+      const start = i * slot;
+      const end   = (i + 1) * slot;
+      const p = Math.max(0, Math.min(1, (progress - start) / slot));
+      const eased = 1 - Math.pow(1 - p, 3);
+
+      // slide in
+      item.style.opacity   = String(Math.min(1, eased * 1.5));
+      item.style.transform = `translateX(${(1 - eased) * 80}px)`;
+
+      // fade out as next one comes in
+      if (p > 0.7 && i < TOTAL_OFFERS - 1) {
+        const out = (p - 0.7) / 0.3;
+        item.style.opacity   = String(Math.max(0, 1 - out));
+        item.style.transform = `translateX(${-out * 40}px)`;
+      }
+
+      // dots
+      if (vipDots[i]) vipDots[i].classList.toggle('active', p > 0.1 && p < 0.95 || (i === TOTAL_OFFERS - 1 && p >= 0.1));
+    });
+  }
+
+
   let lastScrollTop = 0;
   let rafPending = false;
 
@@ -740,12 +916,15 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
       }
       // parallax
       updateAboutParallax();
+      // VIP offers
+      updateVipOffers();
     });
   }
 
   scroller.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', updateAboutParallax);
+  window.addEventListener('resize', () => { updateAboutParallax(); updateVipOffers(); });
   updateAboutParallax();
+  updateVipOffers();
 
 
   // Browser back / forward
