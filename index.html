@@ -457,6 +457,153 @@ nav ul a:hover::after { width: 100%; }
   transform: scale(1.6);
 }
 
+/* what we offer static */
+.services-section {
+  background: var(--navy2);
+  padding: 120px 8%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  position: relative;
+}
+.services-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 8%; right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,.3), transparent);
+}
+.service-block {
+  padding: 72px 60px;
+  position: relative;
+  overflow: hidden;
+}
+.service-block::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(201,168,76,0);
+  transition: background .6s ease;
+}
+.service-block:hover::before {
+  background: rgba(201,168,76,.025);
+}
+.service-block + .service-block {
+  border-left: 1px solid rgba(201,168,76,.1);
+}
+.service-eyebrow {
+  font-size: 9px;
+  letter-spacing: .45em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.service-eyebrow::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+.service-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 200;
+  color: var(--white);
+  letter-spacing: .04em;
+  line-height: 1.05;
+  margin-bottom: 28px;
+}
+.service-divider {
+  width: 40px;
+  height: 1px;
+  background: rgba(201,168,76,.4);
+  margin-bottom: 28px;
+}
+.service-desc {
+  font-size: 12px;
+  line-height: 2.1;
+  color: rgba(245,243,239,.45);
+  letter-spacing: .04em;
+  max-width: 380px;
+  margin-bottom: 48px;
+}
+.service-list {
+  list-style: none;
+  padding: 0; margin: 0 0 52px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.service-list li {
+  font-size: 10px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: rgba(245,243,239,.55);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.service-list li::before {
+  content: '';
+  display: block;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: .6;
+  flex-shrink: 0;
+}
+.service-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 9px;
+  letter-spacing: .4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-decoration: none;
+  position: relative;
+}
+.service-cta::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .4s ease;
+}
+.service-cta:hover::after { transform: scaleX(1); }
+.service-cta svg { width: 16px; height: 16px; }
+.service-num {
+  position: absolute;
+  bottom: 60px; right: 60px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 120px;
+  font-weight: 200;
+  color: rgba(201,168,76,.04);
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+}
+@media (max-width: 768px) {
+  .services-section {
+    grid-template-columns: 1fr;
+    padding: 80px 6%;
+  }
+  .service-block { padding: 60px 0; }
+  .service-block + .service-block {
+    border-left: none;
+    border-top: 1px solid rgba(201,168,76,.1);
+  }
+  .service-num { display: none; }
+}
+
 /* gallery */
 #gallery { min-height: auto; display: block; padding: 100px 8%; background: var(--navy2); }
 .g-head { text-align: center; margin-bottom: 60px; }
@@ -567,6 +714,46 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
       </div>
     </div>
   </div>
+
+  <section class="services-section" id="services">
+    <!-- Transport Personnel -->
+    <div class="service-block reveal">
+      <div class="service-eyebrow">Service 01</div>
+      <div class="service-name">Transport<br>Personnel</div>
+      <div class="service-divider"></div>
+      <p class="service-desc">A dedicated chauffeur service built for executives, diplomats and professionals. Discreet, punctual and always dressed to standard — because how you arrive matters as much as where you're going.</p>
+      <ul class="service-list">
+        <li>Airport &amp; port transfers</li>
+        <li>Corporate &amp; executive travel</li>
+        <li>Long-distance routes</li>
+        <li>Hourly &amp; daily hire</li>
+      </ul>
+      <a href="#contact" class="service-cta">
+        Reserve a Chauffeur
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <div class="service-num">01</div>
+    </div>
+
+    <!-- Go VIP -->
+    <div class="service-block reveal">
+      <div class="service-eyebrow">Service 02</div>
+      <div class="service-name">Go<br>VIP</div>
+      <div class="service-divider"></div>
+      <p class="service-desc">An elevated tier for those who demand more than transportation. Go VIP wraps every journey in privacy, comfort and total exclusivity — from the vehicle selected to the route taken.</p>
+      <ul class="service-list">
+        <li>Private fleet, no shared rides</li>
+        <li>Armoured &amp; tinted vehicles</li>
+        <li>Concierge coordination</li>
+        <li>Events, VIP arrivals &amp; galas</li>
+      </ul>
+      <a href="#contact" class="service-cta">
+        Discover Go VIP
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <div class="service-num">02</div>
+    </div>
+  </section>
 
   <div class="vip-offers" id="vip-offers">
     <div class="pin">
@@ -973,3 +1160,6 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
 </script>
 </body>
 </html>
+
+---SHA---
+d7e444b6bab0bf2073fee2e3d7abd8d39ba98075
