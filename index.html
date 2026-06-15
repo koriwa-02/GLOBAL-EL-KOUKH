@@ -834,69 +834,12 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
 
 
 
-  // Preload both videos on page load so they're fully buffered before click
-  const personnelVid = document.createElement('video');
-  personnelVid.id = 'personnel-video';
-  personnelVid.src = 'PERSONNEL%20INTRO.mp4?v=2';
-  personnelVid.setAttribute('playsinline', '');
-  personnelVid.setAttribute('preload', 'auto');
-  personnelVid.muted = true;
-  personnelVid.loop = false;
-  personnelVid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:1;will-change:transform;transform:translateZ(0);';
-  document.getElementById('pl').insertBefore(personnelVid, document.getElementById('pl').firstChild);
-
-  const vipVid = document.createElement('video');
-  vipVid.id = 'vip-video';
-  vipVid.src = 'vip%20intro.mp4?v=2';
-  vipVid.setAttribute('playsinline', '');
-  vipVid.setAttribute('preload', 'auto');
-  vipVid.muted = true;
-  vipVid.loop = false;
-  vipVid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:1;will-change:transform;transform:translateZ(0);';
-  document.getElementById('pr').insertBefore(vipVid, document.getElementById('pr').firstChild);
-
-  // Force browsers to buffer aggressively
-  personnelVid.load();
-  vipVid.load();
+  // Videos removed
 
   function expand(side) {
     if (expanded) return;
     doExpand(side);
-
-    if (side === 'left') {
-      const pl = document.getElementById('pl');
-      const vid = document.getElementById('personnel-video');
-      vid.style.display = 'block';
-      pl.classList.add('video-active');
-      const playPromise = vid.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          vid.muted = true;
-          vid.play();
-        });
-      }
-      vid.addEventListener('ended', () => {
-        document.getElementById('hero-text').classList.add('show');
-      }, { once: true });
-    }
-
-    if (side === 'right') {
-      const pr = document.getElementById('pr');
-      const vid = document.getElementById('vip-video');
-      vid.style.display = 'block';
-      vid.muted = false;
-      pr.classList.add('video-active');
-      const playPromise = vid.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          vid.muted = true;
-          vid.play();
-        });
-      }
-      vid.addEventListener('ended', () => {
-        document.getElementById('hero-text').classList.add('show');
-      }, { once: true });
-    }
+    document.getElementById('hero-text').classList.add('show');
   }
 
   function doExpand(side) {
@@ -913,7 +856,7 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
     // push state for the expanded panel
     safePushState({ step: 'expanded', side }, '');
 
-    setTimeout(() => { if (side !== 'left') document.getElementById('hero-text').classList.add('show'); }, 850);
+    setTimeout(() => { document.getElementById('hero-text').classList.add('show'); }, 850);
     setTimeout(() => { document.getElementById('navbar').classList.add('show'); }, 1050);
     setTimeout(() => { scroller.classList.add('unlocked'); }, 1050);
 
