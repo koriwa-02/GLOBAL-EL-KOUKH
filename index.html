@@ -832,64 +832,11 @@ footer { background: #040c18; padding: 56px 10%; display: flex; justify-content:
 
   scroller.scrollTop = 0;
 
-  // Preload both videos silently on page load so they're buffered before click
-  const personnelVid = document.createElement('video');
-  personnelVid.id = 'personnel-video';
-  personnelVid.src = 'PERSONNEL%20INTRO.mp4';
-  personnelVid.setAttribute('playsinline', '');
-  personnelVid.muted = true;
-  personnelVid.loop = false;
-  personnelVid.preload = 'auto';
-  personnelVid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;will-change:transform;transform:translateZ(0);';
-  document.getElementById('pl').insertBefore(personnelVid, document.getElementById('pl').firstChild);
-  personnelVid.load();
 
-  const vipVid = document.createElement('video');
-  vipVid.id = 'vip-video';
-  vipVid.src = 'VIP%20INTRO.mp4';
-  vipVid.setAttribute('playsinline', '');
-  vipVid.muted = true;
-  vipVid.loop = false;
-  vipVid.preload = 'auto';
-  vipVid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;will-change:transform;transform:translateZ(0);';
-  document.getElementById('pr').insertBefore(vipVid, document.getElementById('pr').firstChild);
-  vipVid.load();
 
   function expand(side) {
     if (expanded) return;
-
     doExpand(side);
-
-    if (side === 'left') {
-      const pl = document.getElementById('pl');
-      const vid = document.getElementById('personnel-video');
-      // Add dark overlay for readability
-      const overlay = document.createElement('div');
-      overlay.style.cssText = 'position:absolute;inset:0;background:rgba(7,16,31,.45);z-index:2;pointer-events:none;';
-      pl.appendChild(overlay);
-      vid.style.display = 'block';
-      vid.play().catch(() => {});
-      pl.classList.add('video-active');
-      // Show hero text + navbar after video ends, with slide-up
-      vid.addEventListener('ended', () => {
-        document.getElementById('hero-text').classList.add('show');
-      }, { once: true });
-    }
-
-    if (side === 'right') {
-      const pr = document.getElementById('pr');
-      const video = document.getElementById('vip-video');
-      const overlay = document.createElement('div');
-      overlay.style.cssText = 'position:absolute;inset:0;background:rgba(7,16,31,.45);z-index:2;pointer-events:none;';
-      pr.appendChild(overlay);
-      video.style.display = 'block';
-      video.muted = false;
-      video.play().catch(() => {});
-      pr.classList.add('video-active');
-      video.addEventListener('ended', () => {
-        document.getElementById('hero-text').classList.add('show');
-      }, { once: true });
-    }
   }
 
   function doExpand(side) {
